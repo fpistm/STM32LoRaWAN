@@ -32,11 +32,20 @@ extern "C" {
 #include "../STM32CubeWL/Utilities/misc/stm32_systime.h"
 
 /* USER CODE BEGIN Includes */
+/**
+  * @brief Map UTIL_TIMER_IRQ can be overridden in utilities_conf.h to Map on Task rather then Isr
+  */
+#ifndef UTIL_TIMER_IRQ_MAP_INIT
+#define UTIL_TIMER_IRQ_MAP_INIT()
+#endif /* UTIL_TIMER_IRQ_MAP_INIT */
+
+void UTIL_TIMER_IRQ_MAP_PROCESS(void *data);
 
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
+
 
 /* USER CODE END ET */
 
@@ -58,9 +67,10 @@ extern "C" {
 /* Exported functions prototypes ---------------------------------------------*/
 /**
   * @brief Init RTC hardware
+  * @param RtcHandle  RTC_HandleTypeDef
   * @return Status based on @ref UTIL_TIMER_Status_t
   */
-UTIL_TIMER_Status_t TIMER_IF_Init(void);
+UTIL_TIMER_Status_t TIMER_IF_Init(RTC_HandleTypeDef *RtcHandle);
 
 /**
   * @brief Set the alarm

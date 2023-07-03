@@ -39,6 +39,17 @@ extern "C" {
 #define UTIL_TIMER_IRQ_MAP_INIT()
 #endif /* UTIL_TIMER_IRQ_MAP_INIT */
 
+/*
+ * With RTC (RtcHandle.Instance) clocked by LSE, the APRE freq is 256Hz (default)
+ * (1 tick is 3.9ms (when APREDIV = 0x7F)
+ * for other RTC clock freq, the formula is ck_apre = RTC_clock / (prediv_A +1)
+ */
+#define MS_TO_TICK \
+  (uint32_t)(LL_RCC_GetRTCClockFreq() / (LL_RTC_GetAsynchPrescaler(hrtc->Instance) + 1))
+
+/* Give one more (to adjust to x3.9 factor) */
+#define TICK_TO_MS ((1000/MS_TO_TICK) + 1)
+
 void UTIL_TIMER_IRQ_MAP_PROCESS(void *data);
 
 /* USER CODE END Includes */
